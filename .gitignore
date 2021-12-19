@@ -1,0 +1,4 @@
+﻿.vs/
+SignalrServer/bin/
+SignalrServer/obj/
+*.user
