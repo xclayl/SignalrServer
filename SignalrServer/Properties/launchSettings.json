@@ -22,10 +22,14 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "Rest_Api_Cors_Origins": "http://localhost:3000", //http://localhost:3000
+        "Hubs_Cors_Origins": "http://localhost:3000", //http://localhost:3000
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Token_Generator_Shared_Secret": "6tW6BF54sCOW9Yx76M5/yFuACPb8",
+        "Token_Symmetric_Key_Base64": "r9zsP9S9W5GX4KjdlC3/67UHYXmXLnmLGK+fLEnOyC9JPmr4VyheSVkk6k2/GK3Jo6gSygKYKzZ44J4yal48EA=="
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://localhost:5221;http://localhost:5220"
     },
     "Docker": {
       "commandName": "Docker",
