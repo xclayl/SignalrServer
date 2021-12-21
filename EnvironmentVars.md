@@ -15,5 +15,5 @@ Comma separated URLs that are allowed to hit the Hubs API (listeners).
 ### Allow_Anonymous
 TRUE means that JWT tokens are ignored for the REST & Hubs APIs.  Also 
 Token_Generator_Shared_Secret & Token_Symmetric_Key_Base64 are not 
-required or generated for you.
+required and not generated for you.
 
