@@ -12,4 +12,5 @@
 	- [ ] with Axios?
 - [ ] documentation
 - [ ] docker 
-- [ ] github
+- [ ] Nginx example
+- [x] github
