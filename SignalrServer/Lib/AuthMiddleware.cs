@@ -12,6 +12,11 @@ namespace SignalrServer.Lib
     {
         public static async Task Use(HttpContext context, Func<Task> next, Config config)
         {
+            if (config.AllowAnonymous)
+            {
+                await next();
+                return;
+            }
 
             string token = null;
             var askForPassword = true;
@@ -44,7 +49,7 @@ namespace SignalrServer.Lib
             token = token ?? Auth.GetSecretFromAuthHeader(context.Request.Headers, out askForPassword);
 
 
-            if (!ValidToken(token, config.Token_Symmetric_Key_Base64, out var claimsPrincipal))
+            if (!ValidToken(token, config.TokenSymmetricKey, out var claimsPrincipal))
             {
                 if (askForPassword)
                     context.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Realm\"");
@@ -57,11 +62,11 @@ namespace SignalrServer.Lib
             await next();
         }
 
-        private static bool ValidToken(string token, string key, out ClaimsPrincipal claimsPrincipal)
+        private static bool ValidToken(string token, byte[] key, out ClaimsPrincipal claimsPrincipal)
         {
             try
             {
-                var mySecurityKey = new SymmetricSecurityKey(Convert.FromBase64String(key));
+                var mySecurityKey = new SymmetricSecurityKey(key);
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters

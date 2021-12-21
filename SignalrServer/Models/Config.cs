@@ -1,10 +1,13 @@
-﻿namespace SignalrServer.Models
+﻿using System.Collections.Generic;
+
+namespace SignalrServer.Models
 {
     public class Config
     {
-        public string Token_Generator_Shared_Secret { get; set; }
-        public string Token_Symmetric_Key_Base64 { get; set; }
-        public string Rest_Api_Cors_Origins { get; set; }
-        public string Hubs_Cors_Origins { get; set; }
+        public string TokenGeneratorSharedSecret { get; init; }
+        public byte[] TokenSymmetricKey { get; init; }
+        public IReadOnlyList<string> RestApiCorsOrigins { get; init; }
+        public IReadOnlyList<string> HubsCorsOrigins { get; init; }
+        public bool AllowAnonymous { get; init; }
     }
 }

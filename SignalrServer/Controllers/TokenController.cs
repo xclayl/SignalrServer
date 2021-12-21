@@ -64,7 +64,7 @@ namespace SignalrServer.Controllers
         {
             var secret = Auth.GetSecretFromAuthHeader(Request.Headers, out _);
 
-            if (secret != _config.Token_Generator_Shared_Secret)
+            if (secret != _config.TokenGeneratorSharedSecret)
             {
                 Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Realm\"");
                 return new UnauthorizedResult();
@@ -84,7 +84,7 @@ namespace SignalrServer.Controllers
 
         private string CreateToken(string aud, Claim[] claims, DateTimeOffset now, DateTimeOffset expires)
         {
-            var securityKey = new SymmetricSecurityKey(Convert.FromBase64String(_config.Token_Symmetric_Key_Base64));
+            var securityKey = new SymmetricSecurityKey(_config.TokenSymmetricKey);
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 

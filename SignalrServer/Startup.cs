@@ -8,8 +8,10 @@ using SignalrServer.Hubs;
 using SignalrServer.Lib;
 using SignalrServer.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace SignalrServer
 {
@@ -31,12 +33,11 @@ namespace SignalrServer
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var config = Configuration.Get<Config>();
+            var config = Configuration.Get<EnvVarConfig>();
             AddDefaultConfig(config);
-            ValidateConfig(config);
+            _config = ValidateConfig(config);
 
-            _config = config;
-            services.AddSingleton(config);
+            services.AddSingleton(_config);
 
             services.AddSignalR();
 
@@ -45,8 +46,8 @@ namespace SignalrServer
                 options.AddPolicy(name: RestCors,
                     builder =>
                     {
-                        if (!string.IsNullOrWhiteSpace(_config.Rest_Api_Cors_Origins))
-                            builder.WithOrigins(_config.Rest_Api_Cors_Origins.Split(',').Select(ToOrigin).ToArray());
+                        if (_config.RestApiCorsOrigins.Any())
+                            builder.WithOrigins(_config.RestApiCorsOrigins.ToArray());
                         builder.AllowAnyMethod();
                         builder.AllowCredentials();
                         builder.AllowAnyHeader();
@@ -54,8 +55,8 @@ namespace SignalrServer
                 options.AddPolicy(name: HubsCors,
                     builder =>
                     {
-                        if (!string.IsNullOrWhiteSpace(_config.Hubs_Cors_Origins))
-                            builder.WithOrigins(_config.Hubs_Cors_Origins.Split(',').Select(ToOrigin).ToArray());
+                        if (_config.HubsCorsOrigins.Any())
+                            builder.WithOrigins(_config.HubsCorsOrigins.ToArray());
                         builder.AllowAnyMethod();
                         builder.AllowCredentials();
                         builder.AllowAnyHeader();
@@ -76,40 +77,108 @@ namespace SignalrServer
             return uri.GetLeftPart(UriPartial.Authority);
         }
 
-        private void ValidateConfig(Config config)
+        private Config ValidateConfig(EnvVarConfig config)
         {
-            if (string.IsNullOrWhiteSpace(config.Token_Generator_Shared_Secret))
-                throw new Exception("Token_Generator_Shared_Secret is empty");
-            if (string.IsNullOrWhiteSpace(config.Token_Symmetric_Key_Base64))
-                throw new Exception("Token_Symmetric_Key_Base64 is empty");
 
             try
             {
-                var bytes = Convert.FromBase64String(config.Token_Symmetric_Key_Base64);
-                if (bytes.Length != 64)
-                    throw new Exception("Token_Symmetric_Key_Base64 must be 64 bytes");
 
+                var hubsCorsOrigins = !string.IsNullOrWhiteSpace(config.Hubs_Cors_Origins)
+                    ? config.Hubs_Cors_Origins
+                        .Split(',')
+                        .Select(ToOrigin)
+                        .ToList()
+                    : new List<string>();
+
+                var restApiCorsOrigins = !string.IsNullOrWhiteSpace(config.Rest_Api_Cors_Origins)
+                    ? config.Rest_Api_Cors_Origins
+                        .Split(',')
+                        .Select(ToOrigin)
+                        .ToList()
+                    : new List<string>();
+
+                if ("true".Equals(config.Allow_Anonymous, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new Config
+                    {
+                        AllowAnonymous = true,
+                        RestApiCorsOrigins = restApiCorsOrigins,
+                        HubsCorsOrigins = hubsCorsOrigins,
+                    };
+                }
+                else
+                {
+                    var bytes = Convert.FromBase64String(config.Token_Symmetric_Key_Base64);
+                    if (bytes.Length != 64)
+                        throw new Exception("Token_Symmetric_Key_Base64 must be 64 bytes");
+
+
+                    return new Config
+                    {
+                        AllowAnonymous = false,
+                        RestApiCorsOrigins = restApiCorsOrigins,
+                        HubsCorsOrigins = hubsCorsOrigins,
+                        TokenGeneratorSharedSecret = config.Token_Generator_Shared_Secret,
+                        TokenSymmetricKey = bytes,
+                    };
+                }
             }
             catch
             {
                 Console.WriteLine("Error with Token_Symmetric_Key_Base64");
                 throw;
             }
+
+            // config.Hubs_Cors_Origins.Split(',').Select(ToOrigin)
         }
 
-        private void AddDefaultConfig(Config config)
+        private void AddDefaultConfig(EnvVarConfig config)
         {
-            if (string.IsNullOrWhiteSpace(config.Token_Generator_Shared_Secret))
-            {
-                config.Token_Generator_Shared_Secret = GenerateRandomBase64(21);
+            var sb = new StringBuilder();
+            var suggestAnonymous = false;
+            var origConfig = config.Clone();
+            var allowAnonymous = "true".Equals(config.Allow_Anonymous, StringComparison.InvariantCultureIgnoreCase);
 
-                Console.WriteLine($"'Token_Generator_Shared_Secret' environment variable vas not found, so one was generated for you: {config.Token_Generator_Shared_Secret}");
+            if (!allowAnonymous)
+            {
+                if (string.IsNullOrWhiteSpace(config.Token_Generator_Shared_Secret))
+                {
+                    config.Token_Generator_Shared_Secret = GenerateRandomBase64(21);
+
+                    sb.AppendLine($"Token_Generator_Shared_Secret={config.Token_Generator_Shared_Secret}");
+                    suggestAnonymous = true;
+                }
+                if (string.IsNullOrWhiteSpace(config.Token_Symmetric_Key_Base64))
+                {
+                    config.Token_Symmetric_Key_Base64 = GenerateRandomBase64(64);
+                    sb.AppendLine($"Token_Symmetric_Key_Base64={config.Token_Symmetric_Key_Base64}");
+                    suggestAnonymous = true;
+                }
             }
-            if (string.IsNullOrWhiteSpace(config.Token_Symmetric_Key_Base64))
-            {
-                config.Token_Symmetric_Key_Base64 = GenerateRandomBase64(64);
 
-                Console.WriteLine($"'Token_Symmetric_Key_Base64' environment variable was not found, so one was generated for you: {config.Token_Symmetric_Key_Base64}");
+            if (allowAnonymous)
+            {
+                if (!string.IsNullOrWhiteSpace(origConfig.Token_Generator_Shared_Secret))
+                    sb.AppendLine($"Token_Generator_Shared_Secret=");
+                if (!string.IsNullOrWhiteSpace(origConfig.Token_Symmetric_Key_Base64))
+                    sb.AppendLine($"Token_Symmetric_Key_Base64=");
+            }
+
+            if (sb.Length > 0)
+            {
+                Console.WriteLine("The following config settings were changed for you.  You may want to set them in environment variables:");
+                Console.WriteLine();
+                Console.WriteLine(sb);
+                Console.WriteLine();
+            }
+
+            if (suggestAnonymous)
+            {
+                Console.WriteLine("You may want to turn off JWT authentication with the following environment variable:");
+                Console.WriteLine();
+                Console.WriteLine("AllowAnonymous=TRUE");
+                Console.WriteLine();
+
             }
         }
 

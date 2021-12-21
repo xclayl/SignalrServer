@@ -4,7 +4,7 @@
 - [x] CORS for each endpoint
 - [x] Query groups for a connection
 - [x] on disconnect, rejoin groups
-- [ ] Allow_Annonymous=TRUE
+- [x] Allow_Anonymous=TRUE
 - [ ] demo code
 	- [ ] w/ bootstrap
 	- [ ] served by server
