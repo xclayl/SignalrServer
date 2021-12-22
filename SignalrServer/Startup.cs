@@ -66,7 +66,7 @@ namespace SignalrServer
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SignalrServer", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SignalRServer", Version = "v1" });
             });
         }
 
@@ -204,7 +204,7 @@ namespace SignalrServer
             app.UseRouting();
             app.UseCors();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SignalrServer v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SignalRServer v1"));
             app.Use(async (context, next) => await AuthMiddleware.Use(context, next, _config));
 
 
