@@ -4,16 +4,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using SignalrServer.Hubs;
-using SignalrServer.Lib;
-using SignalrServer.Models;
+using SignalRServer.Hubs;
+using SignalRServer.Lib;
+using SignalRServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SignalrServer
+namespace SignalRServer
 {
     public class Startup
     {

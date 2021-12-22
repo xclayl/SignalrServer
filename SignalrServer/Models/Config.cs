@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SignalrServer.Models
+namespace SignalRServer.Models
 {
     public class Config
     {

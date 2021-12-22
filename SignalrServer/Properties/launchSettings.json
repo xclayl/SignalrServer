@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SignalrServer": {
+    "SignalRServer": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SignalrServer.Models
+namespace SignalRServer.Models
 {
     public class TokenInfo
     {

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using SignalrServer.Lib;
-using SignalrServer.Models;
+using SignalRServer.Lib;
+using SignalRServer.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace SignalrServer.Controllers
+namespace SignalRServer.Controllers
 {
     [Route("token-api")]
     [ApiController]

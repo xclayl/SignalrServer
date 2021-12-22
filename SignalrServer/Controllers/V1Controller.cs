@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using SignalrServer.Hubs;
-using SignalrServer.Models;
+using SignalRServer.Hubs;
+using SignalRServer.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace SignalrServer.Controllers
+namespace SignalRServer.Controllers
 {
     [Route("api/v1")]
     [ApiController]

@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace SignalrServer.Lib
+namespace SignalRServer.Lib
 {
     public static class Auth
     {

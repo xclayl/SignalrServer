@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalrServer", "SignalrServer\SignalrServer.csproj", "{5CA40F3D-D4DA-45B7-9927-DF9AC1A61A65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRServer", "SignalRServer\SignalRServer.csproj", "{5CA40F3D-D4DA-45B7-9927-DF9AC1A61A65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{459CCDB8-67E8-4F4E-B4E7-1EE6CA2269C8}"
 	ProjectSection(SolutionItems) = preProject

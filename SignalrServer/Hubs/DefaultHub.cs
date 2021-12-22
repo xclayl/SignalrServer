@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
 
-namespace SignalrServer.Hubs
+namespace SignalRServer.Hubs
 {
     [EnableCors(Startup.HubsCors)]
     public class DefaultHub : Hub

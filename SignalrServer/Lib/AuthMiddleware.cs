@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using SignalrServer.Models;
+using SignalRServer.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SignalrServer.Lib
+namespace SignalRServer.Lib
 {
     public class AuthMiddleware
     {

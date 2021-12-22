@@ -1,4 +1,4 @@
-﻿namespace SignalrServer.Models
+﻿namespace SignalRServer.Models
 {
     public class HttpErrorData
     {
