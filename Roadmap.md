@@ -6,11 +6,13 @@
 - [x] on disconnect, rejoin groups
 - [x] Allow_Anonymous=TRUE
 - [ ] demo code
-	- [ ] w/ bootstrap
+	- [ ] w/ Bootstrap 5
 	- [ ] served by server
 	- [ ] basic JS / JQuery
 	- [ ] with Axios?
 - [ ] documentation
 - [ ] docker 
-- [ ] Nginx example
+- [ ] Nginx example (docker compose example)
 - [x] github
+- [ ] Redis backplane
+- [ ] Limited REST API access (limit to a connect/user/group/etc)
