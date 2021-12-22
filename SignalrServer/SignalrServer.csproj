@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>e5fd5123-cbb4-448c-ab97-7f29af68c04d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerfileRunEnvironmentFiles>docker.dev.env</DockerfileRunEnvironmentFiles>
   </PropertyGroup>
 
   <ItemGroup>
